@@ -36,6 +36,13 @@ public class WordGetter {
 			letters = input.nextLine().toUpperCase();
 			System.out.printf("Please enter the must have letter in the center of the board:[%s]\n> ", letters);
 			mustHaveLetter = input.nextLine().toUpperCase();
+			if (mustHaveLetter.length() > 1) {
+				System.out.println("Please enter only one letter.");
+				letters = "";
+			} else if (!(letters.contains(mustHaveLetter))) {
+				System.out.printf("Please enter on of the characters provided: [%s]\n", letters);
+				letters = "";
+			}
 			for(int i = 0; i < letters.length(); i++) {
 				if (letters2.contains(String.valueOf(letters.charAt(i)))) {
 					letters = "";
@@ -45,7 +52,7 @@ public class WordGetter {
 				}
 			}
 		}
-		return letters;
+		return letters + mustHaveLetter;
 	}
 
 }
