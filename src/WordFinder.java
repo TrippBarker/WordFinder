@@ -1,18 +1,19 @@
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WordFinder {
+public class WordFinder implements Comparable<String>{
 	
 	private ArrayList<String> validWords;
-	private String foundWords;
+	private ArrayList<String> foundWords = new ArrayList<String>();
 	private String letters;
 	private char mustHaveLetter;
+	private String regexPatternForAllLetters = "";
 	private PrintWriter pw;
-	private boolean containsAll = true;
-	private boolean validWord = true;
 	private Pattern pattern;
 	private Matcher matcher;
 	
@@ -33,12 +34,30 @@ public class WordFinder {
 		for (String word: validWords) {
 			matcher = pattern.matcher(word);
 			if (word.contains(String.valueOf(mustHaveLetter)) && matcher.find()) {
-				pw.println(word);
+				foundWords.add(word);
 			}
+		}
+		for (String letter: letters.split("")) {
+			regexPatternForAllLetters += String.format("(?=[^%s]*+%s)", letter, letter);
+		}
+		regexPatternForAllLetters = "^" + regexPatternForAllLetters;
+		Collections.sort(foundWords, Comparator.comparing(String::length));
+		pattern = Pattern.compile(regexPatternForAllLetters);
+		for (String word: foundWords) {
+			matcher = pattern.matcher(word);
+			if (matcher.find()) {
+				word += "****";
+			}
+			pw.println(word);
 		}
 		pw.close();
 		
 	}
-	
+
+	@Override
+	public int compareTo(String o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }
