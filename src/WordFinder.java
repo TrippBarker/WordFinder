@@ -16,6 +16,7 @@ public class WordFinder implements Comparable<String>{
 	private PrintWriter pw;
 	private Pattern pattern;
 	private Matcher matcher;
+	private int prevWordLen;
 	
 	public WordFinder(ArrayList<String> validWords, String letters) {
 		this.validWords = validWords;
@@ -43,12 +44,22 @@ public class WordFinder implements Comparable<String>{
 		regexPatternForAllLetters = "^" + regexPatternForAllLetters;
 		Collections.sort(foundWords, Comparator.comparing(String::length));
 		pattern = Pattern.compile(regexPatternForAllLetters);
+		pw.printf("Letters used to create words: [%s]", letters);
+		pw.println();
+		pw.printf("Must use letter: [%s]", mustHaveLetter);
+		pw.println();
+		pw.println("Words that contain all letters marked with **");
 		for (String word: foundWords) {
 			matcher = pattern.matcher(word);
-			if (matcher.find()) {
-				word += "****";
+			if (word.length() > prevWordLen) {
+				prevWordLen = word.length();
+				pw.println();
+				pw.println("Words Len " + prevWordLen + ":");
 			}
-			pw.println(word);
+			if (matcher.find()) {
+				word ="**" + word + "**";
+			}
+			pw.print(word + " ");
 		}
 		pw.close();
 		
